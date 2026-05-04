@@ -1,0 +1,31 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ title }} - Groove{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h1>{{ title }}</h1>
+    
+    <form method="POST" enctype="multipart/form-data" class="product-form">
+        {% csrf_token %}
+        
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+            <div class="field-errors">{{ field.errors }}</div>
+            {% endif %}
+            {% if field.help_text %}
+            <small class="help-text">{{ field.help_text }}</small>
+            {% endif %}
+        </div>
+        {% endfor %}
+        
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-save">💾 Сохранить</button>
+            <a href="{% url 'product_list' %}" class="btn btn-cancel">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

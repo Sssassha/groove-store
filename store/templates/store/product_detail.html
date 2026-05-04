@@ -1,0 +1,58 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{{ product.name }} - MusicShop{% endblock %}
+
+{% block content %}
+<div class="product-detail">
+    <div class="product-images">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+        <div class="no-image-large">🎵</div>
+        {% endif %}
+    </div>
+    
+    <div class="product-info">
+        <h1>{{ product.name }}</h1>
+        <p class="category">Категория: {{ product.category.name }}</p>
+        
+        <div class="price-block">
+            {% if product.old_price %}
+            <span class="old-price">{{ product.old_price }} ₽</span>
+            <span class="sale-price">{{ product.price }} ₽</span>
+            <span class="discount-badge">-{{ product.get_discount_percent }}%</span>
+            {% else %}
+            <span class="price">{{ product.price }} ₽</span>
+            {% endif %}
+        </div>
+        
+        <div class="stock-info">
+            {% if product.stock > 0 %}
+            <span class="in-stock">✅ В наличии: {{ product.stock }} шт.</span>
+            {% else %}
+            <span class="out-of-stock">❌ Нет в наличии</span>
+            {% endif %}
+        </div>
+        
+        <div class="description">
+            <h3>Описание</h3>
+            <p>{{ product.description }}</p>
+        </div>
+        
+        {% if product.stock > 0 %}
+        <form method="POST" class="add-to-cart">
+            {% csrf_token %}
+            <div class="quantity">
+                <label>Количество:</label>
+                <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}">
+            </div>
+            <button type="submit" class="btn btn-large">🛒 Добавить в корзину</button>
+        </form>
+        {% endif %}
+        
+        <div class="product-actions">
+            <a href="{% url 'product_update' product.pk %}" class="btn btn-edit">✏️ Редактировать</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

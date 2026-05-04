@@ -1,0 +1,42 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Оформление заказа - MusicShop{% endblock %}
+
+{% block content %}
+<h1>📝 Оформление заказа</h1>
+
+<div class="order-summary">
+    <h3>Ваш заказ</h3>
+    <table>
+        <thead>
+            <tr><th>Товар</th><th>Кол-во</th><th>Сумма</th></tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.get_total_price }} ₽</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr><td colspan="2"><strong>Итого:</strong></td><td><strong>{{ total }} ₽</strong></td></tr>
+        </tfoot>
+    </table>
+</div>
+
+<div class="form-container">
+    <form method="POST">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+        </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">✅ Подтвердить заказ</button>
+    </form>
+</div>
+{% endblock %}

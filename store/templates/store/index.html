@@ -1,0 +1,99 @@
+{% extends 'store/base.html' %}
+{% load static %}
+
+{% block title %}Главная - Groove{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <img src="keyboard-synthesizer.gif" alt="Groove" class="hero-gif">
+</div>
+
+<!-- Секция "О магазине GROOVE" -->
+<div class="about-section">
+    <div class="about-container">
+        <h2>О магазине GROOVE</h2>
+        <div class="about-content">
+            <p>
+                Добро пожаловать в <strong>GROOVE</strong> — ваш мир качественных музыкальных инструментов!
+            </p>
+            <p>
+                Мы предлагаем широкий ассортимент гитар, ударных, клавишных и духовых инструментов 
+                от ведущих мировых брендов. У нас вы найдёте всё необходимое как для начинающих музыкантов, 
+                так и для профессиональных исполнителей.
+            </p>
+            <p>
+                Наши преимущества:
+            </p>
+            <ul class="about-list">
+                <li>🎸 Только оригинальные инструменты</li>
+                <li>🥁 Гарантия качества и сервисное обслуживание</li>
+                <li>🎹 Доступные цены и регулярные акции</li>
+                <li>🎶 Бесплатная консультация перед покупкой</li>
+            </ul>
+            <p>
+                <strong>GROOVE</strong> — играйте с душой, звучите в ритме!
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <h2>Акции</h2>
+    <div class="products-grid">
+        {% for product in products_on_sale %}
+        <div class="product-card">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+            <div class="no-image">🎵</div>
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <p class="price">
+                {% if product.old_price %}
+                <span class="old-price">{{ product.old_price }} ₽</span>
+                <span class="sale-price">{{ product.price }} ₽</span>
+                <span class="discount">-{{ product.get_discount_percent }}%</span>
+                {% else %}
+                <span>{{ product.price }} ₽</span>
+                {% endif %}
+            </p>
+            <a href="{{ product.get_absolute_url }}" class="btn">Подробнее</a>
+        </div>
+        {% empty %}
+        <p>Нет товаров со скидкой</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="section">
+    <h2> Новинки</h2>
+    <div class="products-grid">
+        {% for product in new_products %}
+        <div class="product-card">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+            {% else %}
+            <div class="no-image">🎵</div>
+            {% endif %}
+            <h3>{{ product.name }}</h3>
+            <p class="price">{{ product.price }} ₽</p>
+            <a href="{{ product.get_absolute_url }}" class="btn">Подробнее</a>
+        </div>
+        {% empty %}
+        <p>Нет новинок</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="section">
+    <h2> Категории</h2>
+    <div class="categories">
+        {% for category in categories %}
+        <a href="{% url 'category_detail' category.slug %}" class="category-card">
+            {{ category.name }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Корзина - Groove{% endblock %}
+
+{% block content %}
+<h1>🛒 Корзина</h1>
+
+{% if cart_items %}
+<div class="cart-table">
+    <table>
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Сумма</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }} ₽</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.get_total_price }} ₽</td>
+                <td>
+                    <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="remove_item" value="{{ item.id }}">
+                        <button type="submit" class="btn-remove">🗑️</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="total-row">
+                <td colspan="3"><strong>Итого:</strong></td>
+                <td colspan="2"><strong>{{ total }} ₽</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    
+    <div class="cart-actions">
+        <a href="{% url 'product_list' %}" class="btn">Продолжить покупки</a>
+        <a href="{% url 'order_create' %}" class="btn btn-primary">Оформить заказ</a>
+    </div>
+</div>
+{% else %}
+<div class="empty-cart">
+    <p>Корзина пуста</p>
+    <a href="{% url 'product_list' %}" class="btn">Перейти к покупкам</a>
+</div>
+{% endif %}
+{% endblock %}

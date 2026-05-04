@@ -1,0 +1,50 @@
+{% extends 'store/base.html' %}
+
+{% block title %}{% if category %}{{ category.name }}{% else %}Каталог{% endif %} - MusicShop{% endblock %}
+
+{% block content %}
+<div class="catalog-header">
+    <h1>{% if category %}{{ category.name }}{% else %}Все товары{% endif %}</h1>
+    <div class="categories-filter">
+        <a href="{% url 'product_list' %}" class="filter-link {% if not category %}active{% endif %}">Все</a>
+        {% for cat in categories %}
+        <a href="{% url 'category_detail' cat.slug %}" class="filter-link {% if category and category.id == cat.id %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="products-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image %}
+        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+        <div class="no-image">🎸</div>
+        {% endif %}
+        
+        {% if product.is_on_sale %}
+        <span class="sale-badge"> Акция</span>
+        {% endif %}
+        
+        <h3>{{ product.name }}</h3>
+        <p class="description">{{ product.description|truncatewords:15 }}</p>
+        <p class="price">
+            {% if product.old_price %}
+            <span class="old-price">{{ product.old_price }} ₽</span>
+            <span class="sale-price">{{ product.price }} ₽</span>
+            {% else %}
+            <span>{{ product.price }} ₽</span>
+            {% endif %}
+        </p>
+        <div class="stock {% if product.stock == 0 %}out-of-stock{% endif %}">
+            {% if product.stock > 0 %}В наличии: {{ product.stock }}{% else %}Нет в наличии{% endif %}
+        </div>
+        <a href="{{ product.get_absolute_url }}" class="btn">Подробнее</a>
+    </div>
+    {% empty %}
+    <p class="empty">Товаров не найдено</p>
+    {% endfor %}
+</div>
+{% endblock %}

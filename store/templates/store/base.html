@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Groove{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'store/css/groove.css' %}">
+</head>
+<body>
+    <!-- Шапка с меню -->
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="{% url 'index' %}">Groove</a>
+            </div>
+            <div class="nav-links">
+                <a href="{% url 'index' %}">Главная</a>
+                <a href="{% url 'product_list' %}">Каталог</a>
+                <a href="{% url 'cart' %}">🛒 Корзина</a>
+                <a href="{% url 'contacts' %}">Контакты</a>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Сообщения -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Groove - магазин музыкальных инструментов</p>
+    </footer>
+</body>
+</html>
