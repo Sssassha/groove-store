@@ -6,6 +6,7 @@ services:
     container_name: django_groove
     volumes:
       - .:/app
+      - static_volume:/app/staticfiles
     expose:
       - "8000"
 
@@ -17,5 +18,9 @@ services:
       - "443:443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
+      - static_volume:/app/static
     depends_on:
       - web
+
+volumes:
+  static_volume:
